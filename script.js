@@ -6,6 +6,7 @@ var pmp = {
 	geocoder: null,
 
 	init: function() {
+		pmp.setMapSize();
 		pmp.geocoder = new google.maps.Geocoder();
 		var mapOptions = {
 			center: { lat: 51.44, lng: -0.09},
@@ -13,6 +14,17 @@ var pmp = {
 		};
 		pmp.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 		document.getElementById('addresses-form').addEventListener('submit', pmp.formSubmit);
+	},
+
+	setMapSize: function(){
+		// I hate CSS
+		var width = window.innerWidth;
+		var height = window.innerHeight;
+		var map = document.getElementById('map');
+		width = String(Math.round(width * 0.9)) + 'px';
+		height = String(Math.round(height * 0.7)) + 'px';
+		map.style.width = width;
+		map.style.height = height;
 	},
 
 	formSubmit: function(e){
