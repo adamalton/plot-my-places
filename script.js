@@ -6,35 +6,33 @@ var pmp = {
 	geocoder: null,
 
 	init: function() {
-		pmp.setMapSize();
+		var text = pmp.getQueryVariable('addresses').trim();
+		if(text){
+			pmp.initMap();
+		}
+	},
+
+	initMap: function(){
+		pmp.switchToMap();
 		pmp.geocoder = new google.maps.Geocoder();
 		var mapOptions = {
 			center: { lat: 51.44, lng: -0.09},
 			zoom: 13
 		};
 		pmp.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-		document.getElementById('addresses-form').addEventListener('submit', pmp.formSubmit);
-	},
-
-	setMapSize: function(){
-		// I hate CSS
-		var width = window.innerWidth;
-		var height = window.innerHeight;
-		var map = document.getElementById('map');
-		width = String(Math.round(width * 0.9)) + 'px';
-		height = String(Math.round(height * 0.7)) + 'px';
-		map.style.width = width;
-		map.style.height = height;
-	},
-
-	formSubmit: function(e){
-		pmp.log("submit handler");
-		e.preventDefault();
 		pmp.convertAndPlotAddresses();
 	},
 
+	switchToMap: function(){
+		document.getElementById('addresses-form').style.display = 'none';
+		var map = document.getElementById('map');
+		map.style.display = 'block';
+		map.style.width = String(window.innerWidth) + 'px';
+		map.style.height = String(window.innerHeight) + 'px';
+	},
+
 	convertAndPlotAddresses: function(){
-		var text = document.getElementById('addresses').value;
+		var text = pmp.getQueryVariable('addresses').trim();
 		var addresses = text.split(/\n/);
 		for(var i=0; i<addresses.length; i++){
 			var address = addresses[i].trim();
@@ -60,6 +58,18 @@ var pmp = {
 				}
 			}
 		);
+	},
+
+	getQueryVariable: function(name){
+		var query = window.location.search.substring(1);
+		var vars = query.split("&");
+		for (var i=0;i<vars.length;i++) {
+			var pair = vars[i].split("=");
+			if(pair[0] == name){
+				return decodeURIComponent(pair[1]);
+			}
+		}
+		return '';
 	},
 
 	displayError: function(msg){
