@@ -37,12 +37,12 @@ var pmp = {
 		for(var i=0; i<addresses.length; i++){
 			var address = addresses[i].trim();
 			if(address){
-				pmp.convertLatLngToAddress(address);
+				pmp.convertAddressToLatLngMarker(address);
 			}
 		}
 	},
 
-	convertLatLngToAddress: function(address){
+	convertAddressToLatLngMarker: function(address){
 		pmp.geocoder.geocode(
 			{'address': address},
 			function(results, status){
